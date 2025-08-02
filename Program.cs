@@ -2,65 +2,70 @@
 
 namespace Task_Tracker_CLI
 {
+    public enum TaskStatus
+    {
+        ToDo,
+        InProgress,
+        Done
+    }
+    public class Task
+    {
+        public uint Id { get; }
+        public string? Description { get; set; }
+        public TaskStatus Status { get; set; }
+        public DateTime CreatedAt { get; }
+        public DateTime UpdatedAt { get; set; }
+
+        public static uint Count = 0;
+
+        public Task(string description = "")
+        {
+            Id = Count;
+            Description = description;
+            Status = TaskStatus.ToDo;
+            CreatedAt = DateTime.Now;
+            UpdatedAt = DateTime.Now;
+
+            ++Count;
+        }
+    }
+
+    public static class Tracker
+    {
+        public static void AddTask(string description)
+        {
+
+        }
+        public static void UpdateTask(uint id, string description)
+        {
+
+        }
+        public static void DeleteTask(uint id)
+        {
+
+        }
+        public static void MarkTaskInProgress(uint id)
+        {
+
+        }
+        public static void MarkTaskDone(uint id)
+        {
+
+        }
+        public static void ListAllTasks()
+        {
+
+        }
+        public static void ListTasksByStatus(TaskStatus status)
+        {
+
+        }
+    }
     internal class Program
     {
-        public enum TaskStatus
-        {
-            ToDo,
-            InProgress,
-            Done
-        }
-        public class Task
-        {
-            private readonly uint _id;
-            private string _description;
-            private TaskStatus _status;
-            private readonly DateTime _createdAt;
-            private DateTime _updatedAt;
-
-            public uint Id 
-            { 
-                get { return _id; } 
-            }
-            public string Description
-            {
-                get { return _description; }
-                set { _description = value; }
-            }
-            public TaskStatus Status
-            {
-                get { return _status; }
-                set { _status = value; }
-            }
-            public DateTime CreatedAt
-            {
-                get { return _createdAt; }
-            }
-            public DateTime UpdatedAt
-            {
-                get { return _updatedAt; }
-                set { _updatedAt = value; }
-            }
-
-            public static uint Count = 0;
-            
-            public Task(string description = "")
-            {
-                _id = Count;
-                _description = description;
-                _status = TaskStatus.ToDo;
-                _createdAt = DateTime.Now;
-
-                ++Count;
-            }
-        }
         static void Main(string[] args)
         {
-            Console.WriteLine(args.Length);
-            foreach (var arg in args)
-            {
-                Console.WriteLine(arg.GetType());
-            }
+
         }
     }
 }
