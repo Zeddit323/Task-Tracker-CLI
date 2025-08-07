@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Text.Json;
 
 namespace Task_Tracker_CLI
 {
@@ -32,6 +33,36 @@ namespace Task_Tracker_CLI
 
     public static class Tracker
     {
+        public static Dictionary<string, bool> CommandKeywords =
+            new Dictionary<string, bool>()
+            {
+                { "add", false },
+                { "update", false },
+                { "delete", false },
+                { "mark-in-progress", false },
+                { "mark-done", false },
+                { "list", false },
+                { "done", false },
+                { "todo", false },
+                { "in-progress", false }
+            };
+        public static void CheckCommandKeywords(ref string[] commandLineArguments)
+        {
+            foreach (string argument in commandLineArguments)
+            {
+                if (CommandKeywords.ContainsKey(argument))
+                {
+                    CommandKeywords[argument] = true;
+                }
+            }
+        }
+        public static void ResetCommandKeywords()
+        {
+            foreach (KeyValuePair<string, bool> kvp in Tracker.CommandKeywords)
+            {
+                CommandKeywords[kvp.Key] = false;
+            }
+        }
         public static void AddTask(string description)
         {
 
@@ -65,7 +96,20 @@ namespace Task_Tracker_CLI
     {
         static void Main(string[] args)
         {
-
+            args = new string[] { "add", "list", "done", "blablalba", "bleblelbe" };
+            Tracker.CheckCommandKeywords(ref args);
+            foreach (KeyValuePair<string, bool> kvp in Tracker.CommandKeywords)
+            {
+                Console.WriteLine("Key = {0}, Value = {1}",
+                    kvp.Key, kvp.Value);
+            }
+            Console.WriteLine();
+            Tracker.ResetCommandKeywords();
+            foreach (KeyValuePair<string, bool> kvp in Tracker.CommandKeywords)
+            {
+                Console.WriteLine("Key = {0}, Value = {1}",
+                    kvp.Key, kvp.Value);
+            }
         }
     }
 }
