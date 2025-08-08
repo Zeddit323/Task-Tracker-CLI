@@ -46,15 +46,61 @@ namespace Task_Tracker_CLI
                 { "todo", false },
                 { "in-progress", false }
             };
-        public static void CheckCommandKeywords(ref string[] commandLineArguments)
+        public static void Execute(ref string[] args)
         {
-            foreach (string argument in commandLineArguments)
+            // Removing command keywords from the argument list, leaving only non-keyword arguments for Tracker functions
+            
+            List<string> commandLineArgumentsList = args.ToList();
+            int keywordArgumentsCount = 0;
+
+            foreach (string argument in args)
             {
                 if (CommandKeywords.ContainsKey(argument))
                 {
                     CommandKeywords[argument] = true;
+                    commandLineArgumentsList.Remove(argument);
+
+                    keywordArgumentsCount++;
                 }
             }
+
+            // Validating if provided command exists and is correct
+
+            if (keywordArgumentsCount == 0)
+            {
+                Console.WriteLine("No command has been entered.");
+                return;
+            }
+            else if(keywordArgumentsCount <= 2)
+            {
+                if (CommandKeywords["list"] == false && keywordArgumentsCount > 1)
+                {
+                    Console.WriteLine("Only one command must be entered.");
+                    return;
+                }
+                else if (!CommandKeywords["done"]
+                    && !CommandKeywords["todo"]
+                    && !CommandKeywords["in-progress"]
+                    && CommandKeywords["list"]
+                    && keywordArgumentsCount > 1)
+                {
+                    Console.WriteLine("Only one command must be entered.");
+                    return;
+                }
+                else if(CommandKeywords["done"]
+                    || CommandKeywords["todo"]
+                    || CommandKeywords["in-progress"]
+                    && keywordArgumentsCount == 1)
+                {
+                    Console.WriteLine("Command cannot be executed by itself");
+                    return;
+                }
+            }
+            foreach (string argument in commandLineArgumentsList)
+            {
+                Console.WriteLine(argument);
+            }
+            Console.WriteLine(keywordArgumentsCount);
         }
         public static void ResetCommandKeywords()
         {
@@ -96,8 +142,9 @@ namespace Task_Tracker_CLI
     {
         static void Main(string[] args)
         {
-            args = new string[] { "add", "list", "done", "blablalba", "bleblelbe" };
-            Tracker.CheckCommandKeywords(ref args);
+            args = new string[] { "add", "blablalba", "bleblelbe" };
+            Tracker.Execute(ref args);
+            Console.WriteLine();
             foreach (KeyValuePair<string, bool> kvp in Tracker.CommandKeywords)
             {
                 Console.WriteLine("Key = {0}, Value = {1}",
@@ -110,6 +157,7 @@ namespace Task_Tracker_CLI
                 Console.WriteLine("Key = {0}, Value = {1}",
                     kvp.Key, kvp.Value);
             }
+            Console.WriteLine();
         }
     }
 }
