@@ -32,18 +32,20 @@ namespace Task_Tracker_CLI
             ++Count;
         }
     }
-    public class TasksList
+    public class TaskList
     {
         public List<Task> Tasks { get; set; }
-        public TasksList()
+        public TaskList()
         {
             Tasks = new List<Task>();
         }
-        public void AddTask(string description)
+        public void AddTask(string description, ref TaskList taskList)
         {
-            Tasks.Add(new Task(description));
+            Task taskToAdd = new Task(description);
+            Tasks.Add(taskToAdd);
+            ListAffectedRow(ref taskList, taskToAdd);
         }
-        public void UpdateTask(int taskId, string description)
+        public void UpdateTask(int taskId, string description, ref TaskList taskList)
         {
             int? listId = FindListByTaskId(taskId);
             if (!TaskExists(listId))
@@ -52,6 +54,7 @@ namespace Task_Tracker_CLI
             }
             Tasks[(int)listId!].Description = description;
             Tasks[(int)listId!].UpdatedAt = DateTime.UtcNow;
+            ListAffectedRow(ref taskList, Tasks[(int)listId!]);
         }
         public void DeleteTask(int taskId)
         {
@@ -61,17 +64,31 @@ namespace Task_Tracker_CLI
                 return;
             }
             Tasks.RemoveAt((int)listId!);
+            Console.WriteLine("Task has been successfully deleted!");
         }
-        public void MarkTaskInProgress(int id)
+        public void MarkTaskInProgress(int taskId, ref TaskList taskList)
         {
-            
+            int? listId = FindListByTaskId(taskId);
+            if (!TaskExists(listId))
+            {
+                return;
+            }
+            Tasks[(int)listId!].Status = TaskStatus.InProgress;
+            ListAffectedRow(ref taskList, Tasks[(int)listId!]);
         }
-        public void MarkTaskDone(int id)
+        public void MarkTaskDone(int taskId, ref TaskList taskList)
         {
-
+            int? listId = FindListByTaskId(taskId);
+            if (!TaskExists(listId))
+            {
+                return;
+            }
+            Tasks[(int)listId!].Status = TaskStatus.Done;
+            ListAffectedRow(ref taskList, Tasks[(int)listId!]);
         }
-        public void ListAllTasks(ref TasksList taskList)
+        public void ListAllTasks(ref TaskList taskList)
         {
+            Console.WriteLine();
             string header = ConsoleStyling.RowFormatting("Id",
                                              "Description",
                                              "Status",
@@ -93,10 +110,59 @@ namespace Task_Tracker_CLI
                 Console.WriteLine(row);
             }
             ConsoleStyling.PrintSpecialLine(rowLength);
+            Console.WriteLine();
         }
-        public void ListTasksByStatus(TaskStatus status)
+        public void ListTasksByStatus(ref TaskList taskList, TaskStatus status)
         {
-
+            string header = ConsoleStyling.RowFormatting("Id",
+                                             "Description",
+                                             "Status",
+                                             "CreatedAt",
+                                             "UpdatedAt",
+                                             4, ref taskList);
+            int rowLength = header.Length;
+            Console.WriteLine();
+            ConsoleStyling.PrintSpecialLine(rowLength);
+            Console.WriteLine(header);
+            ConsoleStyling.PrintLine(rowLength);
+            foreach (var task in taskList.Tasks)
+            {
+                string row = ConsoleStyling.RowFormatting(task.Id.ToString(),
+                                             task.Description,
+                                             task.Status.ToString(),
+                                             task.CreatedAt.ToString(),
+                                             task.UpdatedAt.ToString(),
+                                             4, ref taskList);
+                if(task.Status == status)
+                {
+                    Console.WriteLine(row);
+                }
+            }
+            ConsoleStyling.PrintSpecialLine(rowLength);
+            Console.WriteLine();
+        }
+        public void ListAffectedRow(ref TaskList taskList, Task task)
+        {
+            string header = ConsoleStyling.RowFormatting("Id",
+                                             "Description",
+                                             "Status",
+                                             "CreatedAt",
+                                             "UpdatedAt",
+                                             4, ref taskList);
+            int rowLength = header.Length;
+            Console.WriteLine();
+            ConsoleStyling.PrintSpecialLine(rowLength);
+            Console.WriteLine(header);
+            ConsoleStyling.PrintLine(rowLength);
+            string row = ConsoleStyling.RowFormatting(task.Id.ToString(),
+                                            task.Description,
+                                            task.Status.ToString(),
+                                            task.CreatedAt.ToString(),
+                                            task.UpdatedAt.ToString(),
+                                            4, ref taskList);
+            Console.WriteLine(row);
+            ConsoleStyling.PrintSpecialLine(rowLength);
+            Console.WriteLine();
         }
         public int? FindListByTaskId(int taskId)
         {
@@ -124,7 +190,7 @@ namespace Task_Tracker_CLI
 
     public static class Tracker
     {
-        public static void Execute(ref string[] args, ref TasksList taskList)
+        public static void Execute(ref string[] args, ref TaskList taskList)
         {
             if( args.Length == 0)
             {
@@ -134,28 +200,56 @@ namespace Task_Tracker_CLI
             switch (args[0])
             {
                 case "add":
-                    if (!NumberOfArgumentsValidation(args.Count(), 2)) { break; }
+                    if (!NumberOfArgumentsValidation(args.Count(), 2, 2)) { break; }
                     if (!DescriptionValidation(args[1])) { break; }
-
-                    taskList.AddTask(args[1]);
-
-
+                    taskList.AddTask(args[1], ref taskList);
                     break;
 
                 case "update":
-                    if (!NumberOfArgumentsValidation(args.Count(), 3)) {  break; }
+                    if (!NumberOfArgumentsValidation(args.Count(), 3, 3)) {  break; }
                     if (!IdParsingValidation(args[1])) { break; }
                     if (!DescriptionValidation(args[2])) { break; }
-                    taskList.UpdateTask(int.Parse(args[1]), args[2]);
+                    taskList.UpdateTask(int.Parse(args[1]), args[2], ref taskList);
                     break;
                 case "delete":
-                    if (!NumberOfArgumentsValidation(args.Count(), 2)) { break; }
+                    if (!NumberOfArgumentsValidation(args.Count(), 2, 2)) { break; }
                     if (!IdParsingValidation(args[1])) { break; }
                     taskList.DeleteTask(int.Parse(args[1]));
                     break;
+                case "mark-in-progress":
+                    if (!NumberOfArgumentsValidation(args.Count(), 2, 2)) { break; }
+                    if (!IdParsingValidation(args[1])) { break; }
+                    taskList.MarkTaskInProgress(int.Parse(args[1]), ref taskList);
+                    break;
+                case "mark-done":
+                    if (!NumberOfArgumentsValidation(args.Count(), 2, 2)) { break; }
+                    if (!IdParsingValidation(args[1])) { break; }
+                    taskList.MarkTaskDone(int.Parse(args[1]), ref taskList);
+                    break;
                 case "list":
-                    if (!NumberOfArgumentsValidation(args.Count(), 1)) { break; }
-                    taskList.ListAllTasks(ref taskList);
+                    if (!NumberOfArgumentsValidation(args.Count(), 1, 2)) { break; }
+                    if (args.Count() == 2)
+                    {
+                        switch (args[1])
+                        {
+                            case "done":
+                                taskList.ListTasksByStatus(ref taskList, TaskStatus.Done);
+                                break;
+                            case "todo":
+                                taskList.ListTasksByStatus(ref taskList, TaskStatus.ToDo);
+                                break;
+                            case "in-progress":
+                                taskList.ListTasksByStatus(ref taskList, TaskStatus.InProgress);
+                                break;
+                            default:
+                                Console.WriteLine("Error: Entered task status does not exist.");
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        taskList.ListAllTasks(ref taskList);
+                    }
                     break;
                 default:
                     Console.WriteLine("Error: Entered command does not exist.");
@@ -186,7 +280,7 @@ namespace Task_Tracker_CLI
             }
             return true;
         }
-        public static bool NumberOfArgumentsValidation(int numberOfArguments, int maxNumberOfArguments)
+        public static bool NumberOfArgumentsValidation(int numberOfArguments, int minNumberOfArguments, int maxNumberOfArguments)
         {
             if (numberOfArguments == 0)
             {
@@ -198,7 +292,7 @@ namespace Task_Tracker_CLI
                 Console.WriteLine("Error: Too many arguments were provided.");
                 return false;
             }
-            if (numberOfArguments < maxNumberOfArguments)
+            if (numberOfArguments < maxNumberOfArguments && numberOfArguments < minNumberOfArguments)
             {
                 Console.WriteLine("Error: Arguments are missing.");
                 return false;
@@ -227,7 +321,7 @@ namespace Task_Tracker_CLI
             string createdAt,
             string updatedAt,
             int widthBetweenRows,
-            ref TasksList taskList)
+            ref TaskList taskList)
         {
             int idLength = GetLongestPropertyLength("id", ref taskList);
             int descriptionLength = GetLongestPropertyLength("description", ref taskList);
@@ -251,7 +345,7 @@ namespace Task_Tracker_CLI
         {
             Console.WriteLine("(]" + new string('=', rowLength - 4) + "[)");
         }
-        public static int GetLongestPropertyLength(string propertyName, ref TasksList taskList)
+        public static int GetLongestPropertyLength(string propertyName, ref TaskList taskList)
         {
             int longestPropertyLength = 0;
             switch (propertyName)
@@ -317,7 +411,7 @@ namespace Task_Tracker_CLI
                 }
             };
 
-            TasksList taskList = new TasksList();
+            TaskList taskList = new TaskList();
             string tasksFileName = "tasks.json";
 
             if (!File.Exists(tasksFileName))
@@ -330,7 +424,7 @@ namespace Task_Tracker_CLI
 
             if (!string.IsNullOrWhiteSpace(tasksJsonString))
             {
-                taskList = JsonSerializer.Deserialize<TasksList>(tasksJsonString, options)!;
+                taskList = JsonSerializer.Deserialize<TaskList>(tasksJsonString, options)!;
             }
 
 
@@ -339,7 +433,7 @@ namespace Task_Tracker_CLI
                 Task.Count = taskList.Tasks.Last().Id + 1;
             }
 
-            args = new string[] { "list" };
+            //args = new string[] { "list", "done" };
 
             Tracker.Execute(ref args, ref taskList);
             string jsonString = JsonSerializer.Serialize(taskList, options);
