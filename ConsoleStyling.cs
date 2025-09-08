@@ -1,0 +1,97 @@
+﻿public static class ConsoleStyling
+{
+    public static string CenterString(string text, int width)
+    {
+        if (text.Length >= width)
+        {
+            return text;
+        }
+        int leftPadding = (width - text.Length) / 2;
+        int rightPadding = width - text.Length - leftPadding;
+
+        return new string(' ', leftPadding) + text +
+            new string(' ', rightPadding);
+    }
+    public static string RowFormatting(
+        string id,
+        string description,
+        string status,
+        string createdAt,
+        string updatedAt,
+        int widthBetweenRows,
+        ref UserTaskList taskList)
+    {
+        int idLength = GetLongestPropertyLength("id", ref taskList);
+        int descriptionLength = GetLongestPropertyLength("description", ref taskList);
+        int statusLength = GetLongestPropertyLength("status", ref taskList);
+        int createdAtLength = GetLongestPropertyLength("createdAt", ref taskList);
+        int updatedAtLength = GetLongestPropertyLength("updatedAt", ref taskList);
+
+        string formattedString =
+            $"||{CenterString(id, widthBetweenRows + idLength)}|" +
+            $"|{CenterString(description, widthBetweenRows + descriptionLength)}|" +
+            $"|{CenterString(status, widthBetweenRows + statusLength)}|" +
+            $"|{CenterString(createdAt, widthBetweenRows + createdAtLength)}|" +
+            $"|{CenterString(updatedAt, widthBetweenRows + updatedAtLength)}||";
+        return formattedString;
+    }
+    public static void PrintLine(int rowLength)
+    {
+        Console.WriteLine("||" + new string('=', rowLength - 4) + "||");
+    }
+    public static void PrintSpecialLine(int rowLength)
+    {
+        Console.WriteLine("(]" + new string('=', rowLength - 4) + "[)");
+    }
+    public static int GetLongestPropertyLength(string propertyName, ref UserTaskList taskList)
+    {
+        int longestPropertyLength = 0;
+        switch (propertyName)
+        {
+            case "id":
+            case "Id":
+                longestPropertyLength = taskList.Tasks.Max(task => Convert.ToString(task.Id).Length);
+                if (longestPropertyLength < "id".Length)
+                {
+                    longestPropertyLength = "id".Length;
+                }
+                break;
+            case "description":
+            case "Description":
+                longestPropertyLength = taskList.Tasks.Max(task => task.Description.Length);
+                if (longestPropertyLength < "description".Length)
+                {
+                    longestPropertyLength = "description".Length;
+                }
+                break;
+            case "status":
+            case "Status":
+                longestPropertyLength = taskList.Tasks.Max(task => task.Status.ToString().Length);
+                if (longestPropertyLength < "status".Length)
+                {
+                    longestPropertyLength = "status".Length;
+                }
+                break;
+            case "createdAt":
+            case "CreatedAt":
+                longestPropertyLength = taskList.Tasks.Max(task => task.CreatedAt.ToString().Length);
+                if (longestPropertyLength < "createdAt".Length)
+                {
+                    longestPropertyLength = "createdAt".Length;
+                }
+                break;
+            case "updatedAt":
+            case "UpdatedAt":
+                longestPropertyLength = taskList.Tasks.Max(task => task.UpdatedAt.ToString().Length);
+                if (longestPropertyLength < "updatedAt".Length)
+                {
+                    longestPropertyLength = "updatedAt".Length;
+                }
+                break;
+            default:
+                return longestPropertyLength;
+        }
+
+        return longestPropertyLength;
+    }
+}
