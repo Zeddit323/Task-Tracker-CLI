@@ -67,7 +67,6 @@ public static class Tracker
                 Console.WriteLine("Error: Entered command does not exist.");
                 break;
         }
-
     }
 
     public static void AddTask(string description, ref UserTaskList taskList)
@@ -84,7 +83,7 @@ public static class Tracker
             return;
         }
         taskList.Tasks[(int)listId!].Description = description;
-        taskList.Tasks[(int)listId!].UpdatedAt = DateTime.UtcNow;
+        taskList.Tasks[(int)listId!].UpdatedAt = DateTime.UtcNow.ToLocalTime();
         ListAffectedRow(ref taskList, taskList.Tasks[(int)listId!]);
     }
     public static void DeleteTask(int taskId, ref UserTaskList taskList)

@@ -15,8 +15,8 @@ public class UserTask
         Id = Count;
         Description = description;
         Status = UserTaskStatus.ToDo;
-        CreatedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
+        CreatedAt = DateTime.UtcNow.ToLocalTime();
+        UpdatedAt = DateTime.UtcNow.ToLocalTime();
 
         ++Count;
     }

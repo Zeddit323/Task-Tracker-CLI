@@ -1,6 +1,6 @@
 ﻿public static class ConsoleStyling
 {
-    public static string CenterString(string text, int width)
+    public static string CenterTextInCell(string text, int width)
     {
         if (text.Length >= width)
         {
@@ -28,11 +28,11 @@
         int updatedAtLength = GetLongestPropertyLength("updatedAt", ref taskList);
 
         string formattedString =
-            $"||{CenterString(id, widthBetweenRows + idLength)}|" +
-            $"|{CenterString(description, widthBetweenRows + descriptionLength)}|" +
-            $"|{CenterString(status, widthBetweenRows + statusLength)}|" +
-            $"|{CenterString(createdAt, widthBetweenRows + createdAtLength)}|" +
-            $"|{CenterString(updatedAt, widthBetweenRows + updatedAtLength)}||";
+            $"||{CenterTextInCell(id, widthBetweenRows + idLength)}|" +
+            $"|{CenterTextInCell(description, widthBetweenRows + descriptionLength)}|" +
+            $"|{CenterTextInCell(status, widthBetweenRows + statusLength)}|" +
+            $"|{CenterTextInCell(createdAt, widthBetweenRows + createdAtLength)}|" +
+            $"|{CenterTextInCell(updatedAt, widthBetweenRows + updatedAtLength)}||";
         return formattedString;
     }
     public static void PrintLine(int rowLength)
@@ -49,7 +49,6 @@
         switch (propertyName)
         {
             case "id":
-            case "Id":
                 longestPropertyLength = taskList.Tasks.Max(task => Convert.ToString(task.Id).Length);
                 if (longestPropertyLength < "id".Length)
                 {
@@ -57,7 +56,6 @@
                 }
                 break;
             case "description":
-            case "Description":
                 longestPropertyLength = taskList.Tasks.Max(task => task.Description.Length);
                 if (longestPropertyLength < "description".Length)
                 {
@@ -73,7 +71,6 @@
                 }
                 break;
             case "createdAt":
-            case "CreatedAt":
                 longestPropertyLength = taskList.Tasks.Max(task => task.CreatedAt.ToString().Length);
                 if (longestPropertyLength < "createdAt".Length)
                 {
@@ -81,7 +78,6 @@
                 }
                 break;
             case "updatedAt":
-            case "UpdatedAt":
                 longestPropertyLength = taskList.Tasks.Max(task => task.UpdatedAt.ToString().Length);
                 if (longestPropertyLength < "updatedAt".Length)
                 {
