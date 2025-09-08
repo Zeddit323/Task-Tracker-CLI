@@ -1,4 +1,7 @@
-﻿public static class ConsoleStyling
+﻿using Task_Tracker_CLI;
+
+// Handles displaying tasks in a table format
+public static class ConsoleStyling
 {
     public static string CenterTextInCell(string text, int width)
     {
@@ -35,14 +38,17 @@
             $"|{CenterTextInCell(updatedAt, widthBetweenRows + updatedAtLength)}||";
         return formattedString;
     }
+    // Used as a separator
     public static void PrintLine(int rowLength)
     {
         Console.WriteLine("||" + new string('=', rowLength - 4) + "||");
     }
+    // Serves as both the header and footer line
     public static void PrintSpecialLine(int rowLength)
     {
         Console.WriteLine("(]" + new string('=', rowLength - 4) + "[)");
     }
+    // Ensures that each row is formatted to have the same length
     public static int GetLongestPropertyLength(string propertyName, ref UserTaskList taskList)
     {
         int longestPropertyLength = 0;
