@@ -47,7 +47,7 @@ public static class Tracker
                         case "done":
                             ListTasksByStatus(ref taskList, UserTaskStatus.Done);
                             break;
-                        case "todo":
+                        case "to-do":
                             ListTasksByStatus(ref taskList, UserTaskStatus.ToDo);
                             break;
                         case "in-progress":
@@ -62,6 +62,10 @@ public static class Tracker
                 {
                     ListAllTasks(ref taskList);
                 }
+                break;
+            case "help":
+                if (!NumberOfArgumentsValidation(args.Count(), 1, 1)) { break; }
+                Help();
                 break;
             default:
                 Console.WriteLine("Error: Entered command does not exist.");
@@ -216,7 +220,25 @@ public static class Tracker
         }
         return true;
     }
-
+    public static void Help()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Task Tracker is a CLI app for managing tasks");
+        Console.WriteLine();
+        Console.WriteLine("List of commands:");
+        Console.WriteLine();
+        Console.WriteLine("  help                                 - displays list of commands");
+        Console.WriteLine("  add \"{description}\"                  - creates a new task to track");
+        Console.WriteLine("  update {task-id} \"{description}\"     - updates a task");
+        Console.WriteLine("  delete {task-id}                     - removes a task");
+        Console.WriteLine("  mark-in-progress {task-id}           - changes a task's status to \"in-progress\"");
+        Console.WriteLine("  mark-done {task-id}                  - changes a task's status to \"done\"");
+        Console.WriteLine("  list                                 - displays all tasks");
+        Console.WriteLine("  list to-do                           - displays tasks with \"to-do\" status");
+        Console.WriteLine("  list in-progress                     - displays tasks with \"in-progress\" status");
+        Console.WriteLine("  list done                            - displays tasks with \"done\" status");
+        Console.WriteLine();
+    }
     //Console arguments validation
 
     public static bool IdParsingValidation(string id)

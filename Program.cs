@@ -12,7 +12,7 @@ namespace Task_Tracker_CLI
         static void Main(string[] args)
         {
 
-            var options = new JsonSerializerOptions
+            var jsonOptions = new JsonSerializerOptions
             {
                 WriteIndented = true,
                 Converters =
@@ -34,7 +34,7 @@ namespace Task_Tracker_CLI
 
             if (!string.IsNullOrWhiteSpace(tasksJsonString))
             {
-                taskList = JsonSerializer.Deserialize<UserTaskList>(tasksJsonString, options)!;
+                taskList = JsonSerializer.Deserialize<UserTaskList>(tasksJsonString, jsonOptions)!;
             }
 
 
@@ -46,7 +46,7 @@ namespace Task_Tracker_CLI
             //args = new string[] { "list", "done" };
 
             Tracker.Execute(ref args, ref taskList);
-            string jsonString = JsonSerializer.Serialize(taskList, options);
+            string jsonString = JsonSerializer.Serialize(taskList, jsonOptions);
             File.WriteAllText(tasksFileName, jsonString);
         }
     }
