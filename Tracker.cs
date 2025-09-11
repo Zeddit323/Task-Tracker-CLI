@@ -122,6 +122,11 @@ public static class Tracker
     }
     public static void ListAllTasks(ref UserTaskList taskList)
     {
+        if (!taskList.Tasks.Any())
+        {
+            Console.WriteLine("No tasks to list.");
+            return;
+        }
         Console.WriteLine();
         string header = ConsoleStyling.RowFormatting("Id",
                                          "Description",
@@ -148,6 +153,11 @@ public static class Tracker
     }
     public static void ListTasksByStatus(ref UserTaskList taskList, UserTaskStatus status)
     {
+        if (!taskList.Tasks.Any())
+        {
+            Console.WriteLine("No tasks to list.");
+            return;
+        }
         string header = ConsoleStyling.RowFormatting("Id",
                                          "Description",
                                          "Status",
@@ -177,6 +187,11 @@ public static class Tracker
     }
     public static void ListAffectedRow(ref UserTaskList taskList, UserTask task)
     {
+        if (!taskList.Tasks.Any())
+        {
+            Console.WriteLine("No tasks to list.");
+            return;
+        }
         string header = ConsoleStyling.RowFormatting("Id",
                                          "Description",
                                          "Status",

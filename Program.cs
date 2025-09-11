@@ -43,8 +43,6 @@ namespace Task_Tracker_CLI
                 UserTask.Count = taskList.Tasks.Last().Id + 1;
             }
 
-            //args = new string[] { "list", "done" };
-
             Tracker.Execute(ref args, ref taskList);
             string jsonString = JsonSerializer.Serialize(taskList, jsonOptions);
             File.WriteAllText(tasksFileName, jsonString);
