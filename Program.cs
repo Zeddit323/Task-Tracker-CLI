@@ -26,7 +26,8 @@ namespace Task_Tracker_CLI
 
             if (!File.Exists(tasksFileName))
             {
-                File.Create(tasksFileName);
+                var tasksfile = File.Create(tasksFileName);
+                tasksfile.Close();
             }
 
             string jsonStringToDeserialize = await File.ReadAllTextAsync(tasksFileName);
