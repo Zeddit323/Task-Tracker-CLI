@@ -29,12 +29,12 @@ namespace Task_Tracker_CLI
                 File.Create(tasksFileName);
             }
 
-            string jsonStringToDeserialize = File.ReadAllText(tasksFileName);
+            Task<string> jsonStringToDeserialize = File.ReadAllTextAsync(tasksFileName);
 
 
-            if (!string.IsNullOrWhiteSpace(jsonStringToDeserialize))
+            if (!string.IsNullOrWhiteSpace(jsonStringToDeserialize.Result))
             {
-                taskList = JsonSerializer.Deserialize<UserTaskList>(jsonStringToDeserialize, jsonOptions)!;
+                taskList = JsonSerializer.Deserialize<UserTaskList>(jsonStringToDeserialize.Result, jsonOptions)!;
             }
 
 
@@ -46,7 +46,7 @@ namespace Task_Tracker_CLI
             Tracker.Execute(ref args, ref taskList);
 
             string jsonStringToSerialize = JsonSerializer.Serialize(taskList, jsonOptions);
-            File.WriteAllText(tasksFileName, jsonStringToSerialize);
+            File.WriteAllTextAsync(tasksFileName, jsonStringToSerialize.ToString());
         }
     }
 }
