@@ -60,5 +60,7 @@ Output:
 (]=====================================================================================[)
 
 ```
+> [!NOTE]
+> `add`, `update`, `mark-in-progress`, and `mark-done` commands also display the row affected by the operation.
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
