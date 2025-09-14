@@ -1,6 +1,7 @@
 # Task Tracker CLI
 A simple command-line app written in C# that helps you keep track of your duties. <br/>
-Your tasks are stored locally in `task.json` file.
+Your tasks are stored locally in `task.json` file. <br/>
+This project is built as part of the [roadmap.sh](https://roadmap.sh/projects) learning path.
 ## Features
 - **Adding** a task with a description
 - **Updating** a description of an existing task
