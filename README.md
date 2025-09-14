@@ -1,7 +1,7 @@
 # Task Tracker CLI
 A simple command-line app written in C# that helps you keep track of your duties. <br/>
 Your tasks are stored locally in `task.json` file. <br/>
-This project is built as part of the [roadmap.sh](https://roadmap.sh/projects) learning path.
+This project is part of the [Task Tracker CLI](https://roadmap.sh/projects/task-tracker) challenge on [roadmap.sh](https://roadmap.sh).
 ## Features
 - **Adding** a task with a description
 - **Updating** a description of an existing task
@@ -10,7 +10,7 @@ This project is built as part of the [roadmap.sh](https://roadmap.sh/projects) l
 - **Listing** all tasks with the ability to filter them by status (`todo`, `in-progress`, `done`)
 ## Instalation
 > [!IMPORTANT]
-> To build this project, you need to install the <a href="https://dotnet.microsoft.com/en-us/download/dotnet/8.0">.NET 8.0 SDK</a>
+> To build this project, you need to install the <a href="https://dotnet.microsoft.com/en-us/download/dotnet/8.0">.NET 8.0 SDK</a>.
 1. Clone this repository
 ```bash
 git clone https://github.com/Zeddit323/Task-Tracker-CLI.git
