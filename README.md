@@ -8,7 +8,7 @@ This project is part of the [Task Tracker CLI](https://roadmap.sh/projects/task-
 - **Deleting** a task
 - **Changing status** of a task to `in-progress` or `done` (by default task's status is `todo`)
 - **Listing** all tasks with the ability to filter them by status (`todo`, `in-progress`, `done`)
-## Instalation
+## Installation 
 > [!IMPORTANT]
 > To build this project, you need to install the <a href="https://dotnet.microsoft.com/en-us/download/dotnet/8.0">.NET 8.0 SDK</a>.
 1. Clone this repository
