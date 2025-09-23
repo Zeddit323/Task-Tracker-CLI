@@ -13,11 +13,11 @@ This project is part of the [Task Tracker CLI](https://roadmap.sh/projects/task-
 > To build this project, you need to install the <a href="https://dotnet.microsoft.com/en-us/download/dotnet/8.0">.NET 8.0 SDK</a>.
 1. Clone this repository
 ```bash
-git clone https://github.com/Zeddit323/Task-Tracker-CLI.git
+git clone https://github.com/Zeddit323/TaskTrackerCLI.git
 ```
 2. Navigate to the project directory
 ```bash
-cd Task-Tracker-CLI
+cd TaskTrackerCLI
 ```
 3. Restore dependencies
 ```bash
